@@ -11,6 +11,7 @@ function App() {
   let [따봉, 따봉변경] = useState([0,0,0]);
   let[modal, setModal] = useState(false);
   let[title, setTitle] = useState(0);
+  let [입력값, 입력값변경] = useState('');
   return (
     <div className="App">
      <div className='black-nav'>
@@ -38,12 +39,20 @@ function App() {
               setTitle(i)
               }}>{글제목[i]}
            
-            <span onClick={()=>{
+            <span onClick={(e)=>{
+              e.stopPropagation(); //html 버블링 현상을 막아줌 ( 스팬을 눌르면 그 뒤에것도 눌리는 현상)
               let copy = [...따봉];
               copy[i] = copy[i] + 1;
               따봉변경(copy)
             }}>👍</span> {따봉[i]} 
-            
+
+            <button onClick={(e)=>{
+              e.stopPropagation();
+              let copy1 = [...글제목];
+              copy1.splice(i,1); //0번째 항목 삭제시 0,1 1번째 삭제시 1,1
+              글제목변경(copy1);
+            }}>삭제</button>
+
             </h4>
             <p>11월14일 발행</p>
            </div>
@@ -51,6 +60,15 @@ function App() {
         })
       }
 
+      <input onChange={(e)=>{
+        입력값변경(e.target.value);
+        }}/>
+        <button onClick={()=>{
+          let copy2 = [...글제목];
+          copy2.unshift(입력값); //입력값State에 저장된 값을 추가해주는 기능
+          글제목변경(copy2);
+        }}>변경</button>
+      
 
       { 
       modal == true ? <Modal 변경 = "여자코트 추천" title = {title} 글제목={글제목}/> : null //이 코드는 if문 ( 조건 ? 참일떄 : 거짓일때)
@@ -68,6 +86,9 @@ function App() {
       </div>
     )
   }
+
+
+
 
 }
 
